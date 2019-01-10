@@ -25,17 +25,12 @@ public class Plate {
         AnsiConsole.systemInstall();
         for (int i = 0; i < size + 1; i++) {
             for (int j = 0; j < size + 2; j++) {
-                if ((j == 0 && i <= size / 2 + 1) || j == size + 1 || i == 0) {
-                    System.out.print(ansi().fg(RED).a(tempBrzegowa).reset() + "\t");
-                    continue;
-                } else if (j == 0) {
+                if ((j == 0 && i <= size / 2 + 1) || j == size + 1 || i == 0 || j==0) {
                     System.out.print("\t");
                     continue;
                 }
-                if (i <= size / 2 || (i > size / 2 && j > (size+1) / 2))
-                    System.out.print(ansi().fg(YELLOW).a(temp[i - 1][j - 1]).reset() + "\t");
-                else if (i == size / 2 + 1 || j == (size+1) / 2)
-                    System.out.print(ansi().fg(BLUE).a("0.0").reset() + "\t");
+                if (i <= size / 2 + 1 || (i > size / 2 && j > (size-1) / 2))
+                    System.out.print(temp[i - 1][j - 1]+ "\t");
                 else
                     System.out.print("\t");
             }
@@ -46,7 +41,5 @@ public class Plate {
         }
         for (int i = 0; i < (size+1) / 2; i++)
             System.out.print("\t");
-        for (int i = (size+1) / 2; i < size + 2; i++)
-            System.out.print(ansi().fg(RED).a(tempBrzegowa).reset() + "\t");
     }
 }

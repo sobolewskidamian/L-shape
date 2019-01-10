@@ -1,15 +1,19 @@
 package agh;
 
-public class lshape {
+public class lshape extends Abstract {
     private double B[][];
     private double L[];
+    double gTemp;
+    double temperaturaBrzegowaDolna;
 
     int n;
 
     private int b[][] = {{-1, 0}, {0, 0}, {0, -1}};
 
-    public lshape(int rozmiar) {
+    public lshape(int rozmiar, double gTemp, double temperaturaBrzegowaDolna) {
         this.n = rozmiar - 1;
+        this.gTemp = gTemp;
+        this.temperaturaBrzegowaDolna = temperaturaBrzegowaDolna;
     }
 
     public void solve() {
@@ -17,36 +21,35 @@ public class lshape {
         this.L = new double[8];
         for (int e = 0; e < 3; e++) {
             for (int i = 0; i < 4; i++) {
-                int i1 = new Counter().translate(e, i);
+                int i1 = super.translate(e, i);
                 if (e == 0)
-                    L[i1] += (new myg(-1.0, 0.5).solve() * new fi(e, i, -1, 0.5).solve()) + (new myg(-0.5, 1).solve() * new fi(e, i, -0.5, 1).solve());
+                    L[i1] += (g(-1.0, 0.5) * super.fi(e, i, -1, 0.5, b)) + (g(-0.5, 1) * super.fi(e, i, -0.5, 1, b));
                 else if (e == 1)
-                    L[i1] += new myg(0.5, 1).solve() * new fi(e, i, 0.5, 1).solve() + new myg(1, 0.5).solve() * new fi(e, i, 1, 0.5).solve();
+                    L[i1] += g(0.5, 1) * super.fi(e, i, 0.5, 1, b) + g(1, 0.5) * super.fi(e, i, 1, 0.5, b);
                 else if (e == 2)
-                    L[i1] += new myg(1, -0.5).solve() * new fi(e, i, 1, -0.5).solve() + new myg(0.5, -1).solve() * new fi(e, i, 0.5, -1).solve();
+                    L[i1] += g(1, -0.5) * super.fi(e, i, 1, -0.5, b) + g(0.5, -1) * super.fi(e, i, 0.5, -1, b);
 
                 for (int j = 0; j < 4; j++) {
-                    int j1 = new Counter().translate(e, j);
-                    B[i1][j1] += new pochodna(i, 1).solve() * new pochodna(j, 1).solve() + new pochodna(i, 2).solve() * new pochodna(j, 2).solve();
+                    int j1 = super.translate(e, j);
+                    B[i1][j1] += super.pochodna(i, 1) * super.pochodna(j, 1) + super.pochodna(i, 2) * super.pochodna(j, 2);
                 }
             }
         }
+
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 if (i == 3 || i == 6 || i == 4)
                     B[i][j] = 0;
 
 
-        L[3] = 0;
-        L[4] = 0;
-        L[6] = 0;
+        for (int i = 0; i < 8; i++)
+            if (i == 3 || i == 6 || i == 4)
+                L[i] = this.temperaturaBrzegowaDolna;
+
         B[3][3] = 1;
         B[4][4] = 1;
         B[6][6] = 1;
 
-
-        System.out.println();
-        System.out.println();
         double[] wynik = new Gauss().solve(B, L);
 
 
@@ -75,7 +78,7 @@ public class lshape {
                 double yval = (y - b2);
 
                 for (int v = 0; v < 4; v++) {
-                    int i1 = new Counter().translate(k, v);
+                    int i1 = super.translate(k, v);
                     if (v == 0)
                         Z[i][j] += wynik[i1] * (1 - xval) * (1 - yval);
                     else if (v == 1)
@@ -89,35 +92,28 @@ public class lshape {
             ys = new Linspace(-1, 1, n);
         }
 
-
-        /*for (int a = n; a >= 0; a--) {
-            for (int x = 0; x < n + 1; x++)
-                System.out.print(round(Z[a][x], 1) + " ");
-            System.out.println();
-        }*/
-
-
         double[][] wynik2 = new double[n + 1][n + 1];
         for (int a = n; a >= 0; a--) {
             for (int x = 0; x < n + 1; x++)
-                wynik2[a][x] = round(Z[n - a][x], 1);
+                if(a>=(n+1)/2 && x <= n/2)
+                    wynik2[a][x]=this.temperaturaBrzegowaDolna;
+                else
+                    wynik2[a][x] = super.round(Z[n - a][x], 2);
         }
 
         Plate plate = new Plate(n + 1, 10);
         plate.init(wynik2);
         plate.print();
-
-        /*for(int x=0;x<wynik.length;x++)
-            System.out.println(wynik[x]);*/
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+    private double g(double x, double y) {
+        double r = x * x + y * y;
+        //return root(Math.pow(r,2), 3.0) * root(Math.pow(Math.sin(Math.atan2(y,x) + Math.PI / 4), 2), 3.0); //funkcja z lshape
+        return this.gTemp * r;
+    }
 
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
+    private Double root(Double base, Double n) {
+        return Math.pow(Math.E, Math.log(base) / n);
     }
 
 }

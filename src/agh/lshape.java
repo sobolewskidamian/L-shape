@@ -3,15 +3,13 @@ package agh;
 public class lshape extends Abstract {
     private double B[][];
     private double L[];
-    double gTemp;
-    double temperaturaBrzegowaDolna;
-
-    int n;
-
+    private double gTemp;
+    private double temperaturaBrzegowaDolna;
+    private int rozmiar;
     private int b[][] = {{-1, 0}, {0, 0}, {0, -1}};
 
     public lshape(int rozmiar, double gTemp, double temperaturaBrzegowaDolna) {
-        this.n = rozmiar - 1;
+        this.rozmiar = rozmiar - 1;
         this.gTemp = gTemp;
         this.temperaturaBrzegowaDolna = temperaturaBrzegowaDolna;
     }
@@ -53,13 +51,13 @@ public class lshape extends Abstract {
         double[] wynik = new Gauss().solve(B, L);
 
 
-        double[][] Z = new double[n + 1][n + 1];
-        Linspace xs = new Linspace(-1, 1, n);
-        Linspace ys = new Linspace(-1, 1, n);
+        double[][] Z = new double[this.rozmiar + 1][this.rozmiar + 1];
+        Linspace xs = new Linspace(-1, 1, this.rozmiar);
+        Linspace ys = new Linspace(-1, 1, this.rozmiar);
 
-        for (int i = 0; i < n + 1; i++) {
+        for (int i = 0; i < this.rozmiar + 1; i++) {
             double x = xs.getNextFloat();
-            for (int j = 0; j < n + 1; j++) {
+            for (int j = 0; j < this.rozmiar + 1; j++) {
                 double y = ys.getNextFloat();
                 int k;
                 if (y > 0) {
@@ -89,19 +87,19 @@ public class lshape extends Abstract {
                         Z[i][j] += wynik[i1] * (1 - xval) * (yval);
                 }
             }
-            ys = new Linspace(-1, 1, n);
+            ys = new Linspace(-1, 1, this.rozmiar);
         }
 
-        double[][] wynik2 = new double[n + 1][n + 1];
-        for (int a = n; a >= 0; a--) {
-            for (int x = 0; x < n + 1; x++)
-                if(a>=(n+1)/2 && x <= n/2)
-                    wynik2[a][x]=this.temperaturaBrzegowaDolna;
+        double[][] wynik2 = new double[this.rozmiar + 1][this.rozmiar + 1];
+        for (int a = this.rozmiar; a >= 0; a--) {
+            for (int x = 0; x < this.rozmiar + 1; x++)
+                if (a >= (this.rozmiar + 1) / 2 && x <= this.rozmiar / 2)
+                    wynik2[a][x] = this.temperaturaBrzegowaDolna;
                 else
-                    wynik2[a][x] = super.round(Z[n - a][x], 2);
+                    wynik2[a][x] = super.round(Z[this.rozmiar - a][x], 2);
         }
 
-        Plate plate = new Plate(n + 1, 10);
+        Plate plate = new Plate(this.rozmiar + 1, 10);
         plate.init(wynik2);
         plate.print();
     }

@@ -80,14 +80,13 @@ public class Lshape extends Abstract {
                 result[a][x] = super.round(result[a][x], 3);
         }
 
-        Plate plate = new Plate(this.size + 1);
-        plate.init(result);
+        Plate plate = new Plate(this.size + 1, result);
         plate.print();
     }
 
     private double g(double x, double y) {
         double r = super.root(x * x + y * y, 2.0);
-        double alfa = Math.atan2(y, x);
+        //double alfa = Math.atan2(y, x);
         //return root(Math.pow(r,2), 3.0) * root(Math.pow(Math.sin(alfa + Math.PI / 4), 2), 3.0); //funkcja z Lshape
         return this.gTemp * r;
     }

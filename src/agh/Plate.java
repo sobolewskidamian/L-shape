@@ -2,15 +2,11 @@ package agh;
 
 public class Plate {
     private int size;
-    private double[][] temp;
+    private double[][] tempArr;
 
-    public Plate(int size) {
+    public Plate(int size, double[][] resultArr) {
         this.size = size;
-        this.temp = new double[size][size];
-    }
-
-    public void init(double[][] a) {
-        temp = a;
+        this.tempArr = resultArr;
     }
 
     public void print() {
@@ -21,7 +17,7 @@ public class Plate {
                     continue;
                 }
                 if (i <= size / 2 + 1 || (i > size / 2 && j > (size - 1) / 2))
-                    System.out.print(temp[i - 1][j - 1] + "\t");
+                    System.out.print(tempArr[i - 1][j - 1] + "\t");
                 else
                     System.out.print("\t");
             }

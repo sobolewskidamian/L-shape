@@ -1,8 +1,6 @@
 package agh;
 
-import static agh.lshape.round;
-
-public class Linspace {
+public class Linspace extends Abstract {
     private float current;
     private final float end;
     private final float step;
@@ -14,7 +12,7 @@ public class Linspace {
     }
 
     public double getNextFloat() {
-        double act = round(current, 6);
+        double act = super.round(current, 6);
         current += step;
         return act;
     }

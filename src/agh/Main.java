@@ -5,16 +5,14 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Rozmiar: ");
-        int rozmiar = scanner.nextInt();
-        System.out.print("G: ");
+        System.out.print("Ilosc punktow pomiedzy wezlami: ");
+        int amount = scanner.nextInt();
+        System.out.print("g = r*");
         double g = scanner.nextDouble();
-        System.out.print("Temperatura brzegowa: ");
-        double brzeg = scanner.nextDouble();
 
-        if (rozmiar > 0)
-            new lshape(rozmiar, g, brzeg).solve();
+        if (amount >= 0)
+            new Lshape(amount * 2 + 3, g).solve();
         else
-            System.out.println("Rozmiar >= 0");
+            System.out.println("Ilosc punktow >= 0");
     }
 }

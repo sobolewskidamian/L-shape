@@ -6,10 +6,12 @@ public class Lshape extends Abstract {
     private double gTemp;
     private int size;
     private int b[][] = {{-1, 0}, {0, 0}, {0, -1}};
+    private double brzeg;
 
-    public Lshape(int size, double gTemp) {
+    public Lshape(int size, double gTemp, double brzeg) {
         this.size = size - 1;
         this.gTemp = gTemp;
+        this.brzeg = brzeg;
     }
 
     public void solve() {
@@ -40,7 +42,7 @@ public class Lshape extends Abstract {
 
         for (int i = 0; i < 8; i++)
             if (i == 3 || i == 6 || i == 4)
-                L[i] = 0;
+                L[i] = this.brzeg;
 
         B[3][3] = 1;
         B[4][4] = 1;
@@ -77,7 +79,10 @@ public class Lshape extends Abstract {
 
         for (int a = 0; a < this.size + 1; a++) {
             for (int x = 0; x < this.size + 1; x++)
-                result[a][x] = super.round(result[a][x], 3);
+                if (result[a][x] == 0)
+                    result[a][x] = this.brzeg;
+                else
+                    result[a][x] = super.round(result[a][x], 3);
         }
 
         Plate plate = new Plate(this.size + 1, result);
@@ -85,9 +90,8 @@ public class Lshape extends Abstract {
     }
 
     private double g(double x, double y) {
-        double r = super.root(x * x + y * y, 2.0);
-        //double alfa = Math.atan2(y, x);
-        //return root(Math.pow(r,2), 3.0) * root(Math.pow(Math.sin(alfa + Math.PI / 4), 2), 3.0); //funkcja z Lshape
-        return this.gTemp * r;
+        //double r = super.root(x * x + y * y, 2.0);
+        //return (this.gTemp * r + this.brzeg) / 2;
+        return this.gTemp * (root(Math.pow(x + y, 2.0) / 2, 3.0) + this.brzeg);
     }
 }

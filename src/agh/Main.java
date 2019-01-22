@@ -9,10 +9,10 @@ public class Main {
         int amount = scanner.nextInt();
         System.out.print("g = r*");
         double g = scanner.nextDouble();
+        System.out.print("Brzeg: ");
+        double brzeg = scanner.nextDouble();
 
-        if (amount >= 0)
-            new Lshape(amount * 2 + 3, g).solve();
-        else
-            System.out.println("Ilosc punktow >= 0");
+        if (amount >= 0 && brzeg >= 0)
+            new Lshape(amount * 2 + 3, g, brzeg).solve();
     }
 }
